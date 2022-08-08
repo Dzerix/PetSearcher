@@ -2,7 +2,7 @@
 
 namespace PetSearcher.Helper
 {
-    public static class Helper
+    public static class HelperClass
     {
         public static string Support = "Support";
         public static string User = "User";
@@ -11,8 +11,8 @@ namespace PetSearcher.Helper
         {
             return new List<SelectListItem>
             {
-                new SelectListItem{Value = Helper.Support, Text = Helper.Support},
-                new SelectListItem{Value = Helper.User, Text = Helper.User}
+                new SelectListItem{Value = HelperClass.Support, Text = HelperClass.Support},
+                new SelectListItem{Value = HelperClass.User, Text = HelperClass.User}
             };
         }
     }
