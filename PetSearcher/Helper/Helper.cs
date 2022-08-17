@@ -15,5 +15,14 @@ namespace PetSearcher.Helper
                 new SelectListItem{Value = HelperClass.User, Text = HelperClass.User}
             };
         }
+
+        public static List<SelectListItem> GetPetTypesForDropDown()
+        {
+            return new List<SelectListItem>
+            {
+                new SelectListItem{Text= "Кот",Value = "Кот"},
+                new SelectListItem{Text= "Собака", Value = "Собака"}
+            };
+        }
     }
 }

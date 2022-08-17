@@ -30,5 +30,10 @@ namespace PetSearcher.Models.ViewModels
         [Required]
         [Display(Name ="Role Name")]
         public string RoleName { get; set; } = Helper.HelperClass.User;
+
+        [Required]
+        [Phone]
+        [DataType(DataType.PhoneNumber)]
+        public string PhoneNumber { get; set; } = string.Empty;
     }
 }

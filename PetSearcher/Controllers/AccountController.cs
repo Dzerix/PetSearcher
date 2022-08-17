@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using PetSearcher.Models;
 using PetSearcher.Models.ViewModels;
 using PetSearcher.Helper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PetSearcher.Controllers
 {
@@ -30,25 +31,27 @@ namespace PetSearcher.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginViewModel model)
         {
-            if (!ModelState.IsValid)
+            if (ModelState.IsValid)
             {
                 var result = await _signInManager.PasswordSignInAsync(model.Email, model.Password, model.RememberMe, false);
                 if(result.Succeeded)
                 {
-                    return RedirectToAction("Index", "Home");
+                    
+                    return RedirectToAction("Index", "Notice");
                 }
-                ModelState.AddModelError(string.Empty, "Invalid login attempt");
+                else
+                    ModelState.AddModelError(string.Empty, "Invalid login attempt");
             }
             return View(model);
         }
 
         public async Task<IActionResult> Register()
         {
-            if(!_roleManager.RoleExistsAsync(HelperClass.Support).GetAwaiter().GetResult())
-            {
-                await _roleManager.CreateAsync(new IdentityRole(HelperClass.Support));
-                await _roleManager.CreateAsync(new IdentityRole(HelperClass.User));
-            }    
+            //if(!_roleManager.RoleExistsAsync(HelperClass.Support).GetAwaiter().GetResult())
+            //{
+            //    await _roleManager.CreateAsync(new IdentityRole(HelperClass.Support));
+            //    await _roleManager.CreateAsync(new IdentityRole(HelperClass.User));
+            //}    
             return View();
         }
 
@@ -59,11 +62,12 @@ namespace PetSearcher.Controllers
             
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser 
-                { 
-                    UserName = model.Email, 
-                    Email = model.Email, 
-                    Name = model.Email 
+                var user = new ApplicationUser
+                {
+                    UserName = model.Email,
+                    Email = model.Email,
+                    Name = model.Email,
+                    PhoneNumber = model.PhoneNumber;
                 };
 
                 var result = await _userManager.CreateAsync(user,model.Password);
@@ -71,7 +75,7 @@ namespace PetSearcher.Controllers
                 {
                     await _userManager.AddToRoleAsync(user, model.RoleName);
                     await _signInManager.SignInAsync(user, isPersistent: false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Notice");
                 }
                 foreach(var error in result.Errors)
                 {
@@ -81,6 +85,7 @@ namespace PetSearcher.Controllers
             return View(model);
         }
 
+        
         [HttpPost]
         public async Task<IActionResult> Logoff()
         {

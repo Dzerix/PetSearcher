@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PetSearcher.Models.ViewModels;
 
 namespace PetSearcher.Models
 {
@@ -9,5 +10,8 @@ namespace PetSearcher.Models
         {
 
         }
+
+        public DbSet<Notice>? Notices { get; set; } 
+
     }
 }

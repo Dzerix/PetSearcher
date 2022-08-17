@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using PetSearcher.Models;
 using System.Diagnostics;
 
@@ -18,8 +19,10 @@ namespace PetSearcher.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Privacy()
         {
+            var val1 = User.IsInRole("User");
             return View();
         }
 
