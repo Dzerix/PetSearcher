@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PetSearcher.Models;
 
 namespace PetSearcher.Helper
 {
@@ -24,5 +25,7 @@ namespace PetSearcher.Helper
                 new SelectListItem{Text= "Собака", Value = "Собака"}
             };
         }
+
+        
     }
 }

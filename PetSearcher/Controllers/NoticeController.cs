@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PetSearcher.Helper;
 using PetSearcher.Models;
+using PetSearcher.Services;
 
 namespace PetSearcher.Controllers
 {
@@ -17,11 +18,13 @@ namespace PetSearcher.Controllers
     {
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly INoticeService _noticeService;
 
-        public NoticeController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public NoticeController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, INoticeService noticeService)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _noticeService = noticeService;
         }
 
         // GET: Notice
@@ -29,7 +32,9 @@ namespace PetSearcher.Controllers
         [Authorize]
         public async Task<IActionResult> Index()
         {
-              return _context.Notices != null ? 
+            ViewBag.PhoneNumbers = _noticeService.GetUsersPhonesList();
+
+            return _context.Notices != null ? 
                           View(await _context.Notices.ToListAsync()) :
                           Problem("Entity set 'ApplicationDbContext.Notices'  is null.");
         }

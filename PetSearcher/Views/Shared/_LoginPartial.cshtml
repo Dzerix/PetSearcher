@@ -1,9 +1,11 @@
 ﻿@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
+
+
 @if (signInManager.IsSignedIn(User))
 { 
     <form method="post" id="logoutForm" asp-action="Logoff" asp-controller="Account">
         <ul class="nav navbar-nav">
-            <li class="navbar-text text-white">Hello, @User.Identity.Name!</li>
+            <li class="navbar-text text-white">Hello, @(await Component.InvokeAsync("FirstName"))!</li>
             <li>
                 <input class="btn btn-link text-white" type="submit" value="Log off" />
             </li>
@@ -20,4 +22,5 @@ else
             <a class="nav-link text-white" id="registerLink" asp-controller="Account" asp-action="Register">Register</a>
         </li>
     </ul>
+   
 }

@@ -4,6 +4,7 @@ using PetSearcher.Models;
 using PetSearcher.Models.ViewModels;
 using PetSearcher.Helper;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace PetSearcher.Controllers
 {
@@ -45,7 +46,7 @@ namespace PetSearcher.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Register()
+        public  IActionResult Register()
         {
             //if(!_roleManager.RoleExistsAsync(HelperClass.Support).GetAwaiter().GetResult())
             //{
@@ -66,8 +67,9 @@ namespace PetSearcher.Controllers
                 {
                     UserName = model.Email,
                     Email = model.Email,
-                    Name = model.Email,
-                    PhoneNumber = model.PhoneNumber;
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    PhoneNumber = model.PhoneNumber
                 };
 
                 var result = await _userManager.CreateAsync(user,model.Password);
@@ -89,6 +91,7 @@ namespace PetSearcher.Controllers
         [HttpPost]
         public async Task<IActionResult> Logoff()
         {
+            
             await _signInManager.SignOutAsync();
             return RedirectToAction("Login", "Account");
         }

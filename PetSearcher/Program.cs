@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using PetSearcher.Models;
+using PetSearcher.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +13,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 {
     options.Password.RequireNonAlphanumeric = false;
 });
-
+builder.Services.AddTransient<INoticeService, NoticeService>();
   
 
 
