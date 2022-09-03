@@ -72,7 +72,7 @@ namespace PetSearcher.Controllers
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,KindOfPet,Name,Description,ImagePath,ImageFile,UserId")] Notice notice)
+        public async Task<IActionResult> Create([Bind("Id,KindOfPet,Name,Description,Location,ImagePath,ImageFile,UserId")] Notice notice)
         {
             if (ModelState.IsValid)
             {
