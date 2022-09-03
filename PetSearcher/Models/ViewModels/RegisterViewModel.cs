@@ -5,11 +5,11 @@ namespace PetSearcher.Models.ViewModels
     public class RegisterViewModel
     {
         [Required]
-        [Display(Name = "First Name")]
+        [Display(Name = "Имя")]
         public string FirstName { get; set; } = string.Empty;
 
         [Required]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Фамилия")]
         public string LastName { get; set; } = string.Empty;
 
         [Required]
@@ -19,11 +19,12 @@ namespace PetSearcher.Models.ViewModels
         [Required]
         [DataType(DataType.Password)]
         [StringLength(30,ErrorMessage ="The {0} must be at least {2} characters long.",MinimumLength = 6)]
+        [Display(Name = "Пароль")]
         public string Password { get; set; } = string.Empty;
 
         [Required]
         [DataType(DataType.Password)]
-        [Display(Name = "Confirm Password")]
+        [Display(Name = "Подтвердите Пароль")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
 
@@ -34,6 +35,7 @@ namespace PetSearcher.Models.ViewModels
         [Required]
         [Phone]
         [DataType(DataType.PhoneNumber)]
+        [Display(Name = "Номер телефона")]
         public string PhoneNumber { get; set; } = string.Empty;
     }
 }

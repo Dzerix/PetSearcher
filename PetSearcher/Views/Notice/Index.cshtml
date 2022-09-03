@@ -7,12 +7,11 @@
 @inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
 @inject ApplicationDbContext dbContext;
 
-@if (signInManager.IsSignedIn(User))
-{
+
     <p>
         <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
     </p>
-}
+
 
 <table class="table">
     <thead>

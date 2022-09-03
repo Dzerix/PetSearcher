@@ -5,9 +5,9 @@
 { 
     <form method="post" id="logoutForm" asp-action="Logoff" asp-controller="Account">
         <ul class="nav navbar-nav">
-            <li class="navbar-text text-white">Hello, @(await Component.InvokeAsync("FirstName"))!</li>
+            <li class="navbar-text text-white">Здравствуйте, @(await Component.InvokeAsync("FirstName"))!</li>
             <li>
-                <input class="btn btn-link text-white" type="submit" value="Log off" />
+                <input class="btn btn-link text-white" type="submit" value="Выйти из Аккаунта" />
             </li>
         </ul>
     </form>
@@ -16,10 +16,10 @@ else
 {
     <ul class="nav">
         <li>
-            <a class="nav-link text-white" id="loginLink" asp-controller="Account" asp-action="Login">Sign In</a>
+            <a class="nav-link text-white" id="loginLink" asp-controller="Account" asp-action="Login">Вход</a>
         </li>
         <li>
-            <a class="nav-link text-white" id="registerLink" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="nav-link text-white" id="registerLink" asp-controller="Account" asp-action="Register">Регистрация</a>
         </li>
     </ul>
    
