@@ -1,5 +1,5 @@
 ﻿@model IEnumerable<PetSearcher.Models.Notice>
-
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
 
 @{
     ViewData["Title"] = "Index";
@@ -7,60 +7,70 @@
 @inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
 @inject ApplicationDbContext dbContext;
 
+@if (signInManager.IsSignedIn(User))
+{
     <p>
         <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
     </p>
-    <table class="table">
-        <thead>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.KindOfPet)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Description)
+            </th>
+            <th>
+                Номер телефона хозяина
+            </th>
+            <th>
+                Место пропажи
+            </th>
+            <th>
+                Фото питомца
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
             <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.KindOfPet)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Name)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Description)
-                </th>
-                <th>
-                    Номер телефона хозяина
-                </th>
-                <th>
-                    Фото питомца
-                </th>
-                <th></th>
+                <td>
+                    @Html.DisplayFor(modelItem => item.KindOfPet)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @(ViewBag.PhoneNumbers[item.UserId])
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Location)
+                </td>
+                <td>
+                    <img src="@("~/Image/"+ item.ImageName)" asp-append-version="true" width="384" height="216" />
+                </td>
+                <td>
+                    @if (User.IsInRole("Support"))
+                    {
+                        <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    }
+                    <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
+
+                </td>
             </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.KindOfPet)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Description)
-                    </td>
-                    <td>
-                        @(ViewBag.PhoneNumbers[item.UserId])
-                    </td>
-                    <td>
-                        <img src="@("~/Image/"+ item.ImageName)" asp-append-version="true" width="384" height="216" />
-                    </td>
-                    <td>
-                        @if (User.IsInRole("Support"))
-                        {
-                            <a class="btn btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
-                            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                        }
-                        <a class="btn btn-primary" asp-action="Details" asp-route-id="@item.Id">Details</a>
 
-                    </td>
-                </tr>
-
-            }
-        </tbody>
-    </table>
+        }
+    </tbody>
+</table>

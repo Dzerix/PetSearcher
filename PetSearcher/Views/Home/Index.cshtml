@@ -1,8 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">Добро пожаловать в PetSearcher</h1>
+    <h3>Что такое PetSearcher?</h3>
+    <p>PetSearcher - это сервис для поиска потерявшихся домашних животных. Он позволяет владельцу быстро разместить объявление о пропаже питомца, указать место, где он в последний раз его видел, фото своего домашнего животного и контакты для связи. После размещения объявление сразу же попадает на доску объявлений, где его могут просматривать все пользователи сети интернет. </p>
+    @if (signInManager.IsSignedIn(User))
+    {
+        <p>
+            <a class="btn btn-success btn-lg" asp-action="Create">Разместить объявление</a>
+        </p>
+    }
 </div>

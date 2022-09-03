@@ -23,7 +23,6 @@ namespace PetSearcher.Controllers
             return View();
         }
 
-        [Authorize]
         public IActionResult Privacy()
         {
             var val1 = User.IsInRole("User");

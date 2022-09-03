@@ -29,7 +29,6 @@ namespace PetSearcher.Controllers
 
         // GET: Notice
 
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             ViewBag.PhoneNumbers = _noticeService.GetUsersPhonesList();
@@ -40,7 +39,6 @@ namespace PetSearcher.Controllers
         }
 
         // GET: Notice/Details/5
-        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Notices == null)
