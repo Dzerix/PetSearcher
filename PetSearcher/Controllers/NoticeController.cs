@@ -4,11 +4,13 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PetSearcher.Helper;
 using PetSearcher.Models;
+using PetSearcher.Models.ViewModels;
 using PetSearcher.Services;
 
 namespace PetSearcher.Controllers
@@ -19,12 +21,14 @@ namespace PetSearcher.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private readonly INoticeService _noticeService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public NoticeController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, INoticeService noticeService)
+        public NoticeController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, INoticeService noticeService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
             _noticeService = noticeService;
+            _userManager = userManager;
         }
 
         // GET: Notice
@@ -32,6 +36,7 @@ namespace PetSearcher.Controllers
         public async Task<IActionResult> Index()
         {
             ViewBag.PhoneNumbers = _noticeService.GetUsersPhonesList();
+            ViewBag.UserId = _userManager.GetUserId(HttpContext.User);
 
             return _context.Notices != null ? 
                           View(await _context.Notices.ToListAsync()) :
@@ -106,11 +111,15 @@ namespace PetSearcher.Controllers
                 return NotFound();
             }
 
-            var notice = await _context.Notices.FindAsync(id);
-            if (notice == null)
+            var DBnotice = await _context.Notices.FindAsync(id);
+            if (DBnotice == null)
             {
                 return NotFound();
             }
+            EditNoticeViewModel notice = new EditNoticeViewModel();
+            notice.Location = DBnotice.Location;
+            notice.Name = DBnotice.Name;
+            notice.Description = DBnotice.Description;
             return View(notice);
         }
 
@@ -120,23 +129,37 @@ namespace PetSearcher.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = "Support")]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,KindOfPet,Name,Description,ImagePath,UserId")] Notice notice)
+        public async Task<IActionResult> Edit(int id, EditNoticeViewModel notice)
         {
-            if (id != notice.Id)
+            //if (id != notice.Id)
+            //{
+            //    return NotFound();
+            //}
+            if (_context.Notices == null)
             {
                 return NotFound();
             }
-
+            var DBnotice = await _context.Notices.FindAsync(id);
+            if ( DBnotice != null)
+            {
+                DBnotice.Name = notice.Name;
+                DBnotice.Description = notice.Description;
+                DBnotice.Location = notice.Location;
+            }
+            else
+            {
+                return NotFound();
+            }
             if (ModelState.IsValid)
             {
                 try
                 {
-                    _context.Update(notice);
+                    _context.Update(DBnotice);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!NoticeExists(notice.Id))
+                    if (!NoticeExists(id))
                     {
                         return NotFound();
                     }
@@ -151,7 +174,7 @@ namespace PetSearcher.Controllers
         }
 
         // GET: Notice/Delete/5
-        [Authorize(Roles = "Support")]
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Notices == null)
@@ -170,11 +193,12 @@ namespace PetSearcher.Controllers
         }
 
         // POST: Notice/Delete/5
-        [Authorize(Roles = "Support")]
+        [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            
             if (_context.Notices == null)
             {
                 return Problem("Entity set 'ApplicationDbContext.Notices'  is null.");
@@ -182,12 +206,18 @@ namespace PetSearcher.Controllers
             var notice = await _context.Notices.FindAsync(id);
             if (notice != null)
             {
-                if (System.IO.File.Exists(notice.ImagePath))
+                if (_userManager.GetUserId(HttpContext.User) == notice.UserId || User.IsInRole("Support"))
                 {
-                    System.IO.File.Delete(notice.ImagePath);
+                    if (System.IO.File.Exists(notice.ImagePath))
+                    {
+                        System.IO.File.Delete(notice.ImagePath);
+                    }
+                    _context.Notices.Remove(notice);
                 }
-                _context.Notices.Remove(notice);
-                
+                else
+                {
+                    return Problem("Error: You are not owner of this notice.");
+                }
             }
             
 
