@@ -103,7 +103,7 @@ namespace PetSearcher.Controllers
         }
 
         // GET: Notice/Edit/5
-        [Authorize(Roles ="Support")]
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Notices == null)
@@ -128,7 +128,7 @@ namespace PetSearcher.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = "Support")]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, EditNoticeViewModel notice)
         {
             //if (id != notice.Id)
@@ -142,33 +142,42 @@ namespace PetSearcher.Controllers
             var DBnotice = await _context.Notices.FindAsync(id);
             if ( DBnotice != null)
             {
+                
                 DBnotice.Name = notice.Name;
                 DBnotice.Description = notice.Description;
                 DBnotice.Location = notice.Location;
+               
             }
             else
             {
                 return NotFound();
             }
-            if (ModelState.IsValid)
+            if (_userManager.GetUserId(HttpContext.User) == DBnotice.UserId || User.IsInRole("Support"))
             {
-                try
+                if (ModelState.IsValid)
                 {
-                    _context.Update(DBnotice);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!NoticeExists(id))
+                    try
                     {
-                        return NotFound();
+                        _context.Update(DBnotice);
+                        await _context.SaveChangesAsync();
                     }
-                    else
+                    catch (DbUpdateConcurrencyException)
                     {
-                        throw;
+                        if (!NoticeExists(id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
                     }
+                    return RedirectToAction(nameof(Index));
                 }
-                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return NotFound();
             }
             return View(notice);
         }
@@ -228,6 +237,27 @@ namespace PetSearcher.Controllers
         private bool NoticeExists(int id)
         {
           return (_context.Notices?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        [Authorize]
+        public IActionResult MyNotices()
+        {
+            ViewBag.PhoneNumbers = _noticeService.GetUsersPhonesList();
+            var UserID = _userManager.GetUserId(HttpContext.User);
+            var NoticeList = new List<Notice>();
+            if (_context.Notices != null)
+            { 
+                foreach (var notice in _context.Notices)
+                {
+                    if(notice.UserId == UserID)
+                    {
+                        NoticeList.Add(notice);
+                    }
+                }
+
+
+            }
+            return View(NoticeList);
         }
     }
 }

@@ -1,29 +1,24 @@
-﻿@model IEnumerable<PetSearcher.Models.Notice>
-@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
-
+﻿@model List<Notice>
 @{
-    ViewData["Title"] = "Объявления";
+    ViewData["Title"] = "Мои объявления";
 }
-@inject Microsoft.AspNetCore.Identity.SignInManager<ApplicationUser> signInManager
-@inject ApplicationDbContext dbContext;
 
-
-    <p>
-        <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
-    </p>
-
+<h1>Ваши объявления</h1>
+<p>
+    <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
+</p>
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.KindOfPet)
+                Вид питомца
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Name)
+                Кличка
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Description)
+                Описание
             </th>
             <th>
                 Номер телефона хозяина
@@ -57,14 +52,12 @@
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
                 <td>
-                    <img src="@("~/Image/"+ item.ImageName)" asp-append-version="true" width="384" height="216" />
+                    <img src="@(" ~/Image/"+ item.ImageName)" asp-append-version="true" width="384" height="216" />
                 </td>
                 <td>
-                    @if (ViewBag.UserId == item.UserId || User.IsInRole("Support"))
-                    {
-                        <a class="btn btn-secondary mt-1" asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
-                        <a class="btn btn-danger mt-1" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
-                    }
+
+                    <a class="btn btn-secondary mt-1" asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
+                    <a class="btn btn-danger mt-1" asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
                     <a class="btn btn-primary mt-1" asp-action="Details" asp-route-id="@item.Id">Подробнее</a>
 
                 </td>
@@ -72,4 +65,5 @@
 
         }
     </tbody>
+
 </table>

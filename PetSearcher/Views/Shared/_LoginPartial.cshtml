@@ -7,6 +7,9 @@
         <ul class="nav navbar-nav">
             <li class="navbar-text text-white">Здравствуйте, @(await Component.InvokeAsync("FirstName"))!</li>
             <li>
+                <button class="btn btn-link text-white" asp-controller="Notice" asp-action="MyNotices">Мои объявления</button>
+            </li>
+            <li>
                 <input class="btn btn-link text-white" type="submit" value="Выйти из Аккаунта" />
             </li>
         </ul>
