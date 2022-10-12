@@ -363,4 +363,6 @@ MigrationBackup/
 FodyWeavers.xsd
 
 appsettings.json
-Image/
+*.jpg
+*.jpeg
+*.png
