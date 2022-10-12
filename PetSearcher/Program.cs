@@ -14,7 +14,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
 });
 builder.Services.AddTransient<INoticeService, NoticeService>();
-  
+builder.Services.AddMvc().AddRazorPagesOptions(options => options.Conventions.AddPageRoute("/Notice/Index",""));
 
 
 var app = builder.Build();
@@ -41,6 +41,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Notice}/{action=Index}/{id?}");
 
 app.Run();
