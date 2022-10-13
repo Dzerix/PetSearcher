@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace PetSearcher.Models.ViewModels
 {
@@ -37,5 +38,10 @@ namespace PetSearcher.Models.ViewModels
         [DataType(DataType.PhoneNumber)]
         [Display(Name = "Номер телефона")]
         public string PhoneNumber { get; set; } = string.Empty;
+
+
+        [Display(Name = "Согласие с политикой конфиденциальности")]
+        [NotMapped]
+        public bool Privacy { get; set; }
     }
 }

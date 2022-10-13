@@ -31,7 +31,6 @@ namespace PetSearcher.Controllers
             _userManager = userManager;
         }
 
-        // GET: Notice
 
         public async Task<IActionResult> Index()
         {
@@ -43,7 +42,7 @@ namespace PetSearcher.Controllers
                           Problem("Entity set 'ApplicationDbContext.Notices'  is null.");
         }
 
-        // GET: Notice/Details/5
+       
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Notices == null)
@@ -61,7 +60,7 @@ namespace PetSearcher.Controllers
             return View(notice);
         }
 
-        // GET: Notice/Create
+       
         [Authorize]
         public IActionResult Create()
         {
@@ -69,16 +68,18 @@ namespace PetSearcher.Controllers
             return View();
         }
 
-        // POST: Notice/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [Authorize]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,KindOfPet,Name,Description,Location,ImagePath,ImageFile,UserId")] Notice notice)
+        public async Task<IActionResult> Create(Notice notice)
         {
-            if (ModelState.IsValid)
+            if(notice.Privacy == false)
             {
+                ModelState.AddModelError(nameof(notice.Privacy), "Необходимо согласие с политикой конфиденциальности");
+            }
+            if (ModelState.IsValid)
+            {   
                 string wwwRootPath = _webHostEnvironment.WebRootPath;
                 string fileName = Path.GetFileNameWithoutExtension(notice.ImageFile.FileName);
                 string fileExtension = Path.GetExtension(notice.ImageFile.FileName);
@@ -102,7 +103,7 @@ namespace PetSearcher.Controllers
             return View(notice);
         }
 
-        // GET: Notice/Edit/5
+       
         [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
@@ -123,9 +124,7 @@ namespace PetSearcher.Controllers
             return View(notice);
         }
 
-        // POST: Notice/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize]
@@ -182,7 +181,7 @@ namespace PetSearcher.Controllers
             return View(notice);
         }
 
-        // GET: Notice/Delete/5
+        
         [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
@@ -201,7 +200,7 @@ namespace PetSearcher.Controllers
             return View(notice);
         }
 
-        // POST: Notice/Delete/5
+        
         [Authorize]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

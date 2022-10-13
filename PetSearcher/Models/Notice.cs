@@ -33,5 +33,9 @@ namespace PetSearcher.Models
         [Display(Name ="Фото питомца")]
         public IFormFile ImageFile { get; set; }
         public string UserId { get; set; } = string.Empty;
+
+        [Display(Name = "Согласие с политикой конфиденциальности")]
+        [NotMapped]
+        public bool Privacy { get; set; }
     }
 }
