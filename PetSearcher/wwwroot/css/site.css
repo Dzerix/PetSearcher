@@ -63,4 +63,5 @@ body {
 .PetImage {
     width: 384px;
     height: auto;
+    background-color: white;
 }
