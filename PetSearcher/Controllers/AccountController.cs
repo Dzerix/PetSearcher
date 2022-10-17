@@ -46,13 +46,13 @@ namespace PetSearcher.Controllers
             return View(model);
         }
 
-        public  IActionResult Register()
+        public async Task<IActionResult> Register()
         {
-            //if(!_roleManager.RoleExistsAsync(HelperClass.Support).GetAwaiter().GetResult())
-            //{
-            //    await _roleManager.CreateAsync(new IdentityRole(HelperClass.Support));
-            //    await _roleManager.CreateAsync(new IdentityRole(HelperClass.User));
-            //}    
+            if (!_roleManager.RoleExistsAsync(HelperClass.Support).GetAwaiter().GetResult())
+            {
+                await _roleManager.CreateAsync(new IdentityRole(HelperClass.Support));
+                await _roleManager.CreateAsync(new IdentityRole(HelperClass.User));
+            }
             return View();
         }
 

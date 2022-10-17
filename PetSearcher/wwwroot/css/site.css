@@ -60,8 +60,20 @@ body {
 }
 
 
-.PetImage {
-    width: 384px;
+.PetImageSmall {
+    width: 200px;
     height: auto;
     background-color: white;
+}
+
+.PetImage {
+    width: 350px;
+    height: auto;
+    background-color: white;
+}
+
+.NoticeList {
+    margin: 0;
+    margin-top: 20px;
+    padding: 0;
 }

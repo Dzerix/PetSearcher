@@ -15,7 +15,6 @@ namespace PetSearcher.Services
 
         public Dictionary<string, string> GetUsersPhonesList()
         {
-
             Dictionary<string, string> list = new Dictionary<string, string>();
             foreach (var user in _context.Users)
             {

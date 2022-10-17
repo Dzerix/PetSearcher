@@ -8,9 +8,9 @@
 @inject ApplicationDbContext dbContext;
 
 
-    <p>
-        <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
-    </p>
+<p>
+    <a class="btn btn-success" asp-action="Create">Разместить объявление</a>
+</p>
 
 
 <table class="table">
@@ -57,7 +57,7 @@
                     @Html.DisplayFor(modelItem => item.Location)
                 </td>
                 <td>
-                    <img class="PetImage" src="@("~/Image/"+ item.ImageName)" asp-append-version="true"/>
+                    <img class="PetImage" src="@("~/Image/"+ item.ImageName)" asp-append-version="true" />
                 </td>
                 <td>
                     @if (ViewBag.UserId == item.UserId || User.IsInRole("Support"))

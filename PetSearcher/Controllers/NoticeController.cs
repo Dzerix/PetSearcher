@@ -45,6 +45,7 @@ namespace PetSearcher.Controllers
        
         public async Task<IActionResult> Details(int? id)
         {
+            ViewBag.PhoneNumbers = _noticeService.GetUsersPhonesList();
             if (id == null || _context.Notices == null)
             {
                 return NotFound();
